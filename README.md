@@ -5,7 +5,7 @@ Fonte dos dados: https://data.world/laurel/world-happiness-report-data
 
 Perguntas a serem respondidas com a análise:
 
-Pergunta 1:O aumento do PIB per capita de um país afeta positivamente a expectativa de vida dos cidadãos ao nascer? Qual a correlação entre essas duas variáveis?
+Pergunta 1: O aumento do PIB per capita de um país afeta positivamente a expectativa de vida dos cidadãos ao nascer? Qual a correlação entre essas duas variáveis?
 
 Pergunta 2: Existe uma correlação entre a escala de vida e a conscientização do público em geral sobre a corrupção nos negócios e no governo? Qual a correlação entre essas duas variáveis?
 

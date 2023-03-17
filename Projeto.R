@@ -4,6 +4,7 @@ library(mice)
 library(ggplot2)
 library(lattice)
 library(ggthemes)
+library(dplyr)
 
 dados = read.csv("dataset.csv")
 
@@ -21,7 +22,6 @@ unique(dados$Country)
 md.pattern(dados[,c("PIBPerCapta", "SocialSupport", "HealthyLifeExpectancy", "Freedom", "Generosity", "CorruptionPerceptions", "PositiveAffects", "NegativeAffects")])
 dados_limpos = mice(dados, m=5, maxit=50)
 
-View(dados_limpos$data)
 summary(dados_limpos)
 dados_limpos$imp$PIBPerCapta
 dados_limpos = complete(dados_limpos, 3)
@@ -69,4 +69,99 @@ cor(dados_limpos$PIBPerCapta, dados_limpos$HealthyLifeExpectancy, method = "pear
 cor(dados_limpos$PIBPerCapta, dados_limpos$HealthyLifeExpectancy, method = "spearman")
 
 # O resultado da correlação é bem alto, portanto as variáveis possuem
-# Uma forte correlação
+# Uma forte correlação positiva
+
+# Para a pergunta número 2, vamos conferir a relação entre a escada da vida e
+# a conscientização do público sobre a corrupção.
+# O mapa de correlação indica que possivelmente temos uma correlação negativa,
+# Vamos conferir a fundo
+
+ggplot(dados_limpos, aes(LifeLadder, CorruptionPerceptions)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  labs(title = "Escada da Vida X Percepção Sobre a Corrupção") +
+  theme_pander()
+
+cor(dados_limpos$LifeLadder, dados_limpos$CorruptionPerceptions, method = "pearson")
+cor(dados_limpos$LifeLadder, dados_limpos$CorruptionPerceptions, method = "spearman")
+
+# Vemos que a escada da vida e a conscientização do público sobre a corrupção
+# possuem uma fraca correlação negativa
+
+# Para a pergunta 3, vamos checar a relação entre a escada de vida e a média
+# de felicidade. O mapa de correlação indica algum nível de correlação
+# positiva. Vamos conferir
+
+ggplot(dados_limpos, aes(LifeLadder, PositiveAffects)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  labs(title = "Escada da Vida X Felicidade") +
+  theme_pander()
+
+cor(dados_limpos$LifeLadder, dados_limpos$PositiveAffects, method = "pearson")
+cor(dados_limpos$LifeLadder, dados_limpos$PositiveAffects, method = "spearman")
+
+# Vemos que a escada da vida e a felicidade média geral possuem uma
+# correlação positiva moderada
+
+# A pergunta 4 questiona se o país com o menor índice de suporte social
+# tem maior percepção de corrupção.
+
+dados_limpos_tibble = as_tibble(dados_limpos)
+
+suporte_por_pais = dados_limpos_tibble %>% select(Country, SocialSupport) %>%
+  group_by(Country) %>%
+  summarise(media_suporte_social = mean(SocialSupport)) %>%
+  arrange(media_suporte_social)
+
+?arrange
+
+View(suporte_por_pais)
+
+ggplot(suporte_por_pais[1:5,], aes(x = as.factor(Country), y = media_suporte_social),
+       colour = as.factor(Country)) + geom_col() +
+  labs(title = "5 Países com os menores índices de suporte racial") +
+  theme_pander()
+
+# O país com o menor índice de suporte racial é a República da África Central
+
+corrupcao_por_pais = dados_limpos_tibble %>% select(Country, CorruptionPerceptions) %>%
+  group_by(Country) %>%
+  summarise(media_percepcao_corrupcao = mean(CorruptionPerceptions)) %>%
+  arrange(desc(media_percepcao_corrupcao))
+
+View(corrupcao_por_pais)
+
+print(corrupcao_por_pais, n = 55)
+
+# A República da África Central não é o país com a maior percepção de corrupção.
+# Na verdade, de 166 países, ele esta na posição número 54. Isso pode ser
+# averiguado vendo a correlação entre o índice de suporte racial e a
+# percepção de corrupção.
+
+ggplot(dados_limpos, aes(SocialSupport, CorruptionPerceptions)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  labs(title = "Suporte Social X Percepção de Corrupção") +
+  theme_pander()
+
+cor(dados_limpos$SocialSupport, dados_limpos$CorruptionPerceptions, method = "pearson")
+cor(dados_limpos$SocialSupport, dados_limpos$CorruptionPerceptions, method = "spearman")
+
+# Conforme esperávamos, o suporte social e a percepção de corrupção possuem uma
+# fraca correlação negativa, o que explica a situação da República da África Central
+# em relação a essas duas variáveis
+
+# A pergunta 5 nos indaga se pessoas generosas são mais felizes.
+# O mapa de correlações indica uma correlação fraca.
+
+ggplot(dados_limpos, aes(Generosity, PositiveAffects)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  labs(title = "Generosidade X Felicidade") +
+  theme_pander()
+
+cor(dados_limpos$Generosity, dados_limpos$PositiveAffects, method = "pearson")
+cor(dados_limpos$Generosity, dados_limpos$PositiveAffects, method = "spearman")
+
+# A generosidade possui uma correlação positiva fraca com a felicidade

@@ -30,6 +30,8 @@ View(dados_limpos)
 summary(dados_limpos)
 str(dados_limpos)
 
+rm(dados)
+
 # Fazendo o boxplot para as variáveis numéricas
 col_names_numeric = c("Year", "LifeLadder", "PIBPerCapta", "SocialSupport", "HealthyLifeExpectancy", "Freedom", "Generosity", "CorruptionPerceptions", "PositiveAffects", "NegativeAffects") 
 
@@ -44,6 +46,8 @@ metodos <- c("pearson", "spearman")
 
 cors <- lapply(metodos, function(method) 
   (cor(dados_limpos[, col_names_numeric], method = method)))
+
+cors
 
 plot.cors <- function(x, labs){
   diag(x) <- 0.0 
@@ -64,7 +68,6 @@ ggplot(dados_limpos, aes(PIBPerCapta, HealthyLifeExpectancy)) +
   labs(title = "PIB per Capta X Expectativa de Vida") +
   theme_pander()
 
-?cor
 cor(dados_limpos$PIBPerCapta, dados_limpos$HealthyLifeExpectancy, method = "pearson")
 cor(dados_limpos$PIBPerCapta, dados_limpos$HealthyLifeExpectancy, method = "spearman")
 
@@ -113,8 +116,6 @@ suporte_por_pais = dados_limpos_tibble %>% select(Country, SocialSupport) %>%
   group_by(Country) %>%
   summarise(media_suporte_social = mean(SocialSupport)) %>%
   arrange(media_suporte_social)
-
-?arrange
 
 View(suporte_por_pais)
 

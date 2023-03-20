@@ -1,7 +1,10 @@
 # Analise-Exploratoria-Dados-Socioeconomicos
-Projeto de análise exploratória de dados econômicos utilizando a linguagem R.
 
-Fonte dos dados: https://data.world/laurel/world-happiness-report-data
+## Projeto de análise exploratória de dados econômicos utilizando a linguagem R.
+
+##### Fonte dos dados: https://data.world/laurel/world-happiness-report-data
+
+## Objetivos do projeto
 
 Perguntas a serem respondidas com a análise:
 
@@ -14,3 +17,5 @@ Pergunta 3: O aumento na escala de vida tem algum efeito na média de felicidade
 Pergunta 4: O país com o menor índice de suporte social tem maior percepção de corrupção em relação às empresas e ao governo no país?
 
 Pergunta 5: Pessoas generosas são mais felizes?
+
+### Veja a Wiki do projeto para o resultado das análises

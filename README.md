@@ -1,4 +1,4 @@
-# Analise-Exploratoria-Dados-Socioeconomicos
+# Analise Exploratoria de Dados Socioeconomicos
 
 ## Projeto de análise exploratória de dados econômicos utilizando a linguagem R.
 
